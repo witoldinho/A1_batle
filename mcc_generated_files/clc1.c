@@ -62,8 +62,8 @@ void CLC1_Initialize(void)
     // DS2 SCCP4 OCM4 Output; DS1 CLCINB I/O pin; DS4 CLCINB I/O pin; DS3 UART1 TX Output; 
     CLC1SEL = 0x350;
 	
-    // G1D1T disabled; G1D3T enabled; G2D2T enabled; G3D1T disabled; G2D4T disabled; G3D3T disabled; G4D2T disabled; G1D1N disabled; G4D4T disabled; G1D2N disabled; G2D1N disabled; G3D2N disabled; G4D1N disabled; G1D4N disabled; G2D3N disabled; G3D4N disabled; G4D3N disabled; G1D2T disabled; G2D1T disabled; G3D2T disabled; G4D1T disabled; G1D4T disabled; G2D3T disabled; G3D4T disabled; G4D3T disabled; G1D3N disabled; G2D2N disabled; G3D1N disabled; G2D4N disabled; G3D3N disabled; G4D2N disabled; G4D4N disabled; 
-    CLC1GLS = 0x820;
+    // G1D1T disabled; G1D3T disabled; G2D2T enabled; G3D1T disabled; G2D4T disabled; G3D3T disabled; G4D2T disabled; G1D1N disabled; G4D4T disabled; G1D2N disabled; G2D1N disabled; G3D2N disabled; G4D1N disabled; G1D4N disabled; G2D3N disabled; G3D4N disabled; G4D3N disabled; G1D2T enabled; G2D1T disabled; G3D2T disabled; G4D1T disabled; G1D4T disabled; G2D3T disabled; G3D4T disabled; G4D3T disabled; G1D3N disabled; G2D2N disabled; G3D1N disabled; G2D4N disabled; G3D3N disabled; G4D2N disabled; G4D4N disabled; 
+    CLC1GLS = 0x808;
 	
 	
 	CLC1_Enable();	
