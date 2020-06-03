@@ -71,7 +71,7 @@ void PIN_MANAGER_Initialize (void)
      ***************************************************************************/
     TRISA = 0x87D7;
     TRISB = 0xEEBB;
-    TRISC = 0x03FF;
+    TRISC = 0x01FF;
     TRISD = 0x0001;
 
     /****************************************************************************
@@ -108,8 +108,9 @@ void PIN_MANAGER_Initialize (void)
     RPCONbits.IOLOCK = 0;
 
     RPOR3bits.RP13R = 0x000B;    //RB8->SCCP4:OCM4
-    RPOR1bits.RP8R = 0x0004;    //RB2->UART2:U2TX
     RPINR9bits.U2RXR = 0x0009;    //RB3->UART2:U2RX
+    RPOR4bits.RP18R = 0x0011;    //RC9->CLC1:CLC1OUT
+    RPOR1bits.RP8R = 0x0004;    //RB2->UART2:U2TX
 
     RPCONbits.IOLOCK = 1; // lock   PPS
     SYSTEM_RegLock(); 
