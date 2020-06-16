@@ -85,17 +85,25 @@
 #include "system.h"
 #include "interrupt_manager.h"
 #include "exceptions.h"
-#include "uart1.h"
-#include "uart2.h"
+#include "i2c1.h"
+#include "sccp5_compare.h"
+#include "sccp6_compare.h"
+#include "sccp4_compare.h"
 #include "tmr2.h"
 #include "tmr1.h"
+#include "uart1.h"
+#include "uart2.h"
 
 void SYSTEM_Initialize(void)
 {
     PIN_MANAGER_Initialize();
     INTERRUPT_Initialize();
     CLOCK_Initialize();
+    SCCP4_COMPARE_Initialize();
+    SCCP5_COMPARE_Initialize();
+    SCCP6_COMPARE_Initialize();
     UART2_Initialize();
+    I2C1_Initialize();
     UART1_Initialize();
     TMR2_Initialize();
     TMR1_Initialize();

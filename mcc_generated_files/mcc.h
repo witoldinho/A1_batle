@@ -51,13 +51,17 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "watchdog.h"
 #include "interrupt_manager.h"
 #include "exceptions.h"
-#include "uart1.h"
-#include "uart2.h"
+#include "i2c1.h"
+#include "sccp5_compare.h"
+#include "sccp6_compare.h"
+#include "sccp4_compare.h"
 #include "tmr2.h"
 #include "tmr1.h"
+#include "uart1.h"
+#include "watchdog.h"
+#include "uart2.h"
 
 #warning "This file will be removed in future MCC releases. Use system.h instead."
 
