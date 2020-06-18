@@ -111,4 +111,8 @@ void INTERRUPT_Initialize (void)
         IPC4bits.T1IP = 1;
     //    Sub Priority: 0
         IPC4bits.T1IS = 0;
+        
+        IPC4bits.T3IP=1; //timer 3 prior & subprior
+        IPC4bits.T3IS=0;
+      
 }

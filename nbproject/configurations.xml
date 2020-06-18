@@ -51,6 +51,7 @@
       </logicalFolder>
       <itemPath>main.c</itemPath>
       <itemPath>zasob.h</itemPath>
+      <itemPath>zasob.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

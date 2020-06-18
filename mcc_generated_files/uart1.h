@@ -52,6 +52,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+
 #ifdef __cplusplus  // Provide C++ Compatibility
 
     extern "C" {
@@ -83,6 +84,8 @@
     None.
     
 */
+        inline void piny_lo(void);
+     
 
 void UART1_Initialize(void);
 

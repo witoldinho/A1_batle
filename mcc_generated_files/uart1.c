@@ -1,6 +1,8 @@
 
 #include <xc.h>
 #include "uart1.h"
+#include "../zasob.h"
+#include "uart2.h"
 
 /**
   Section: UART1 APIs
@@ -68,6 +70,80 @@ bool UART1_IsTxDone(void)
 
 void __attribute__ ((vector(_UART1_RX_VECTOR), interrupt(IPL1SOFT))) _UART1_RX( void )
 {
+    static enum {DS_BREAK, DS_START , DS_DATA} dmxstate=DS_BREAK;//dmxstate
+    static uint16_t cd_addr=0;
+    static uint8_t channel_data[512];
+    
+   // uint32_t s=(uint32_t)U1STA;
+     if(U1STAbits.FERR==1 )pin3_hi;
+     if(U1STAbits.URXDA == 1)
+    {
+        pin1_hi;
+    }
+    volatile uint8_t c= U1RXREG;
+    //UART2_Write(c);
+     
+     
+     //if(U1STAbits.PERR) pin2_hi;
+     if(!c)pin2_hi;
+  /*   
+    if(U1STAbits.FERR==1 )
+    {
+        T3CONbits.ON=1;
+        dmxstate=c?DS_BREAK:DS_START;
+       // pin1_tg;
+        pin1_hi;
+    }
+    else
+    {
+       if(D512_IF.Timeout) // IFS0bits.T3IF przepełnienie licznika t3
+       {
+           dmxstate=DS_BREAK;
+      //     IFS0bits.T3IF=0;
+           
+           T3CONbits.ON=0;
+           D512_IF.Timeout=0;
+          // pin2_tg;
+         //  pin2_hi;
+       }
+     switch(dmxstate)
+     {
+         case DS_START:
+             dmxstate=c?DS_BREAK:DS_DATA;
+             
+             break;
+             
+         case DS_DATA:
+             channel_data[cd_addr]=c;
+             if(++cd_addr==DMX_CHANNELS)
+             {
+                 dmxstate=DS_BREAK;
+             }
+             
+             break;
+             
+         default:
+             break;
+         
+     }
+     if(dmxstate!=DS_DATA && cd_addr)
+     {
+     //    UART2_Write(channel_data[1]);
+         //CCP4RB=10+channel_data[1]*(10);
+         //CCP5RB=10+channel_data[2]*(10);
+         //CCP6RB=10+channel_data[3]*(10);
+       //  pin3_tg;
+        
+         
+         cd_addr=0;
+     }
+     
+       
+        
+    }
+   */ 
+    piny_lo();
+        IFS1CLR= 1 << _IFS1_U1RXIF_POSITION;
     
 }
 
@@ -98,4 +174,10 @@ void __attribute__((deprecated)) UART1_Disable(void)
     U1MODECLR = _U1MODE_ON_MASK;
 }
 
-
+inline void piny_lo(void)
+{
+  pin1_lo;
+    pin2_lo;
+    pin3_lo;  
+}
+ 

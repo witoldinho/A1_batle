@@ -93,8 +93,9 @@
 #include "tmr1.h"
 #include "uart1.h"
 #include "uart2.h"
+#include "../zasob.h"
 
-void SYSTEM_Initialize(void)
+    void SYSTEM_Initialize(void)
 {
     PIN_MANAGER_Initialize();
     INTERRUPT_Initialize();
@@ -107,9 +108,10 @@ void SYSTEM_Initialize(void)
     UART1_Initialize();
     TMR2_Initialize();
     TMR1_Initialize();
+    TMR3_Initialize();
     INTERRUPT_GlobalEnable();
 }
 
 /**
  End of File
-*/
+////*/
