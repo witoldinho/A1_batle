@@ -1,4 +1,5 @@
 #include "zasob.h"
+#include "mcc_generated_files/uart2.h"
 //#include "mcc_generated_files/pin_manager.h"
 
 void TMR3_Initialize (void)
@@ -33,4 +34,14 @@ void __attribute__ ((vector(_TIMER_3_VECTOR), interrupt(IPL1SOFT))) TMR3_ISR()
   //  pin3_tg;
     
     IFS0CLR = _IFS0_T3IF_MASK;
+}
+void DMX_OUT_2(void)
+{
+    uint16_t x;
+    D512_IF.Ramka_OK=NOK;
+    for(x=0;x<DMX_CHANNELS;x++){
+        UART2_Write(channel_data[x++]); 
+    }
+   
+    
 }

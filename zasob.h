@@ -37,7 +37,12 @@ extern "C" {
 #define OK  1
 #define NOK 0
 
+#define TIMER3_ON  T3CONbits.ON=1
+#define TIMER3_OFF T3CONbits.ON=0
+
+
 #define DMX_CHANNELS 512
+extern volatile uint8_t channel_data[DMX_CHANNELS];
 
 //
 typedef union 
@@ -48,10 +53,12 @@ struct
     uint32_t Ramka_OK:1;
     uint32_t Error:1;
     uint32_t Res:1;
-    uint32_t Dummy:28;
+    uint32_t Fflag:1;
+    uint32_t Dummy:27;
 };
 uint32_t forbajt;
 
 }DMX512_flagi;
 extern DMX512_flagi D512_IF;
 void TMR3_Initialize (void);
+void DMX_OUT_2(void);

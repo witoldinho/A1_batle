@@ -6,6 +6,7 @@
                          Main application
  */
 DMX512_flagi D512_IF;
+volatile uint8_t channel_data[DMX_CHANNELS];
 
 static void kickstart(void);
 
@@ -18,6 +19,11 @@ int main(void)
     {
         // Add your application code
       //  pin2_lo;
+        if(D512_IF.Ramka_OK)
+        {
+            DMX_OUT_2();
+        }
+        
     }
     return 1; 
 }

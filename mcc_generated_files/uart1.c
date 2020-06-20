@@ -72,20 +72,78 @@ void __attribute__ ((vector(_UART1_RX_VECTOR), interrupt(IPL1SOFT))) _UART1_RX( 
 {
     static enum {DS_BREAK, DS_START , DS_DATA} dmxstate=DS_BREAK;//dmxstate
     static uint16_t cd_addr=0;
-    static uint8_t channel_data[512];
+    
     
    // uint32_t s=(uint32_t)U1STA;
-     if(U1STAbits.FERR==1 )pin3_hi;
-     if(U1STAbits.URXDA == 1)
-    {
-        pin1_hi;
-    }
-    volatile uint8_t c= U1RXREG;
+     if(U1STAbits.FERR==1 )
+     {
+        pin3_hi;
+        D512_IF.Fflag=OK;
+        D512_IF.Ramka_OK=NOK;
+        D512_IF.Timeout=NOK;
+        dmxstate=DS_BREAK;
+        TIMER3_ON ; //        T3CONbits.ON=1; 
+     }
+         else
+         {
+             if(dmxstate==DS_BREAK && D512_IF.Fflag)
+             {
+                  while(U1STAbits.URXDA == 1)
+                    {
+                        pin1_hi;
+                        if(!U1RXREG)
+                        {
+                            dmxstate=DS_START;
+                        }
+                        else
+                        {
+                            dmxstate=DS_BREAK;
+                            
+                            
+                        }
+                    }
+             }   
+                  
+             switch(dmxstate)
+             {
+                 case DS_START:
+                   
+                  
+                      D512_IF.Fflag=NOK;
+                      if(D512_IF.Timeout)
+                      {
+                          dmxstate=DS_BREAK;
+                          TIMER3_OFF;
+                          D512_IF.Timeout=NOK;
+                      }
+                          else
+                          {
+                          dmxstate=DS_DATA;
+
+                          } 
+                 
+                      break;
+                 case   DS_DATA:
+                     channel_data[cd_addr]=U1RXREG;
+                     
+                     break;
+                      
+             }
+             
+   
+     }
+      piny_lo();
+        IFS1CLR= 1 << _IFS1_U1RXIF_POSITION;
+    
+}      
+         
+    
+ //   volatile uint8_t c= U1RXREG;
     //UART2_Write(c);
      
      
      //if(U1STAbits.PERR) pin2_hi;
-     if(!c)pin2_hi;
+    // if(!c)pin2_hi;
   /*   
     if(U1STAbits.FERR==1 )
     {
@@ -142,10 +200,7 @@ void __attribute__ ((vector(_UART1_RX_VECTOR), interrupt(IPL1SOFT))) _UART1_RX( 
         
     }
    */ 
-    piny_lo();
-        IFS1CLR= 1 << _IFS1_U1RXIF_POSITION;
-    
-}
+ 
 
 
 /*******************************************************************************
