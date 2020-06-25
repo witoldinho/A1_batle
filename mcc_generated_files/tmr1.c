@@ -49,6 +49,7 @@
 
 #include <stdio.h>
 #include "tmr1.h"
+#include "../zasob.h"
 
 /**
  Section: File specific functions
@@ -159,6 +160,7 @@ uint16_t TMR1_Counter16BitGet( void )
 void __attribute__ ((weak)) TMR1_CallBack(void)
 {
     // Add your custom callback code here
+  //  pin1_tg;
 }
 
 void  TMR1_SetInterruptHandler(void (* InterruptHandler)(void))

@@ -109,6 +109,7 @@
     TMR2_Initialize();
     TMR1_Initialize();
     TMR3_Initialize();
+    DMACONbits.ON=1; //dma ON 4kanały
     INTERRUPT_GlobalEnable();
 }
 

@@ -1,8 +1,10 @@
 
 #include <xc.h>
+#include <string.h>
 #include "uart1.h"
 #include "../zasob.h"
 #include "uart2.h"
+
 
 /**
   Section: UART1 APIs
@@ -72,28 +74,36 @@ void __attribute__ ((vector(_UART1_RX_VECTOR), interrupt(IPL1SOFT))) _UART1_RX( 
 {
     static enum {DS_BREAK, DS_START , DS_DATA} dmxstate=DS_BREAK;//dmxstate
     static uint16_t cd_addr=0;
+  //  pin2_hi;
     
+   // volatile uint8_t c= U1RXREG;
+ //   while(U1STAbits.URXDA == 1);
+        
     
    // uint32_t s=(uint32_t)U1STA;
      if(U1STAbits.FERR==1 )
      {
-        pin3_hi;
+       // pin1_hi;
         D512_IF.Fflag=OK;
         D512_IF.Ramka_OK=NOK;
         D512_IF.Timeout=NOK;
         dmxstate=DS_BREAK;
         TIMER3_ON ; //        T3CONbits.ON=1; 
+        
+       //  pin1_hi;
      }
-         else
-         {
+    while(U1STAbits.URXDA == 0);
+    
+         
              if(dmxstate==DS_BREAK && D512_IF.Fflag)
              {
                   while(U1STAbits.URXDA == 1)
                     {
-                        pin1_hi;
+                       
                         if(!U1RXREG)
                         {
                             dmxstate=DS_START;
+                            
                         }
                         else
                         {
@@ -108,8 +118,9 @@ void __attribute__ ((vector(_UART1_RX_VECTOR), interrupt(IPL1SOFT))) _UART1_RX( 
              {
                  case DS_START:
                    
-                  
+               //   pin2_hi;
                       D512_IF.Fflag=NOK;
+                      pin2_hi;
                       if(D512_IF.Timeout)
                       {
                           dmxstate=DS_BREAK;
@@ -119,19 +130,25 @@ void __attribute__ ((vector(_UART1_RX_VECTOR), interrupt(IPL1SOFT))) _UART1_RX( 
                           else
                           {
                           dmxstate=DS_DATA;
-
+                        
                           } 
                  
                       break;
                  case   DS_DATA:
                      channel_data[cd_addr]=U1RXREG;
-                     
+                            pin3_hi;
+                            if(cd_addr==DMX_CHANNELS)
+                            {
+                                D512_IF.Ramka_OK=OK;
+                              //  memcpy(datas,channel_data,DMX_CHANNELS);
+                                dmxstate=DS_BREAK;
+                            }
                      break;
                       
              }
              
    
-     }
+     
       piny_lo();
         IFS1CLR= 1 << _IFS1_U1RXIF_POSITION;
     
