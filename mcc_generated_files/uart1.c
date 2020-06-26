@@ -1,9 +1,11 @@
 
 #include <xc.h>
 #include <string.h>
+#include <proc/PIC32MM-GPM-0XX/p32mm0256gpm048.h>
 #include "uart1.h"
 #include "../zasob.h"
-#include "uart2.h"
+//#include "uart2.h"
+
 
 
 /**
@@ -92,12 +94,12 @@ void __attribute__ ((vector(_UART1_RX_VECTOR), interrupt(IPL1SOFT))) _UART1_RX( 
         
        //  pin1_hi;
      }
-    while(U1STAbits.URXDA == 0);
+   while(U1STAbits.URXDA == 0);
     
          
              if(dmxstate==DS_BREAK && D512_IF.Fflag)
              {
-                  while(U1STAbits.URXDA == 1)
+                  if(U1STAbits.URXDA == 1)
                     {
                        
                         if(!U1RXREG)
@@ -135,7 +137,7 @@ void __attribute__ ((vector(_UART1_RX_VECTOR), interrupt(IPL1SOFT))) _UART1_RX( 
                  
                       break;
                  case   DS_DATA:
-                     channel_data[cd_addr]=U1RXREG;
+                     channel_data[cd_addr++]=U1RXREG;
                             pin3_hi;
                             if(cd_addr==DMX_CHANNELS)
                             {
@@ -153,8 +155,101 @@ void __attribute__ ((vector(_UART1_RX_VECTOR), interrupt(IPL1SOFT))) _UART1_RX( 
         IFS1CLR= 1 << _IFS1_U1RXIF_POSITION;
     
 }      
-         
+
+/*void __attribute__ ((vector(_UART1_RX_VECTOR), interrupt(IPL1SOFT))) _UART1_RX( void )
+{
+    static enum {DS_BREAK, DS_START , DS_DATA} dmxstate=DS_BREAK;//dmxstate
+    static uint16_t cd_addr=0;
+    //pin1_hi;
     
+    volatile uint8_t c;
+ //   while(U1STAbits.URXDA == 1);
+        
+    
+   // uint32_t s=(uint32_t)U1STA;
+      
+    
+     if(U1STAbits.FERR==1 )
+     {
+        pin1_hi;
+        D512_IF.Fflag=OK;
+        D512_IF.Ramka_OK=NOK;
+        D512_IF.Timeout=NOK;
+        dmxstate=DS_BREAK;
+        TIMER3_ON ; //        T3CONbits.ON=1; 
+       // while (U1STAbits.URXDA == 0);
+        //  IFS1CLR= 1 << _IFS1_U1RXIF_POSITION;
+       //  piny_lo();
+       //  pin1_hi;
+     }
+     
+ // while( U1STAbits.URXDA==0);
+    
+    // c= UART1_Read();
+          while (U1STAbits.URXDA == 1)
+          {
+              pin2_hi;
+              
+          }
+    
+                c=U1RXREG; 
+    
+    
+         
+             if(dmxstate==DS_BREAK && D512_IF.Fflag )
+             {                  
+                        if(!c)
+                        {
+                            dmxstate=DS_START;                  
+                        }
+                        else
+                        {
+                            dmxstate=DS_BREAK; 
+                        }
+             }      
+     
+                     switch(dmxstate)
+             {
+                 case DS_START:
+                   
+                  pin2_hi;
+                      D512_IF.Fflag=NOK;
+                     
+                      if(D512_IF.Timeout)
+                      {
+                          dmxstate=DS_BREAK;
+                          TIMER3_OFF;
+                          D512_IF.Timeout=NOK;
+                      }
+                          else
+                          {
+                          dmxstate=DS_DATA;
+                        
+                          } 
+                 
+                      break;
+                 case   DS_DATA:
+                     channel_data[cd_addr++]=c;
+                            
+                            if(cd_addr==DMX_CHANNELS)
+                            {
+                                D512_IF.Ramka_OK=OK;
+                              //  memcpy(datas,channel_data,DMX_CHANNELS);
+                                dmxstate=DS_BREAK;
+                                pin3_hi;
+                            }
+                     break;
+                      
+             }
+        
+      
+    
+    
+    piny_lo();
+        IFS1CLR= 1 << _IFS1_U1RXIF_POSITION;
+}
+         
+    */
  //   volatile uint8_t c= U1RXREG;
     //UART2_Write(c);
      
@@ -248,7 +343,7 @@ void __attribute__((deprecated)) UART1_Disable(void)
 
 inline void piny_lo(void)
 {
-  pin1_lo;
+      pin1_lo;
     pin2_lo;
     pin3_lo;  
 }

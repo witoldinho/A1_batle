@@ -2,11 +2,12 @@
 #include "mcc_generated_files/system.h"
 #include "zasob.h"
 #include "mcc_generated_files/uart2.h"
+#include <stdbool.h>
 
 /*
                          Main application
  */
-DMX512_flagi D512_IF;
+volatile DMX512_flagi D512_IF;
 uint8_t channel_data[DMX_CHANNELS];
 
 uint8_t datas[DMX_CHANNELS];
@@ -25,6 +26,7 @@ int main(void)
     // initialize the device
     SYSTEM_Initialize();
     kickstart();
+    
     while (1)
     {
      // outd();
@@ -42,11 +44,19 @@ int main(void)
 
 void kickstart(void)
 {
+    uint16_t i;
+    uint8_t j;
+    
         pin1_lo;
         pin2_lo;
         pin3_lo;
         D512_IF.forbajt=0x0; 
         DMA_CH0.bajt=0;
+        
+        for (i=0;i<512; i++)
+        {
+            datas[i]=++j;
+        }
     
 }
 

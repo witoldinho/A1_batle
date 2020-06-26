@@ -74,7 +74,7 @@ struct
 uint32_t forbajt;
 
 }DMX512_flagi;
-extern DMX512_flagi D512_IF;
+extern volatile DMX512_flagi D512_IF;
 
 typedef union
   {
