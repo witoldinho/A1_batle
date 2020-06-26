@@ -75,7 +75,7 @@ bool UART1_IsTxDone(void)
 void __attribute__ ((vector(_UART1_RX_VECTOR), interrupt(IPL1SOFT))) _UART1_RX( void )
 {
     static enum {DS_BREAK, DS_START , DS_DATA} dmxstate=DS_BREAK;//dmxstate
-    static uint16_t cd_addr=0;
+    static volatile uint16_t cd_addr=0;
   //  pin2_hi;
     
    // volatile uint8_t c= U1RXREG;
@@ -85,7 +85,7 @@ void __attribute__ ((vector(_UART1_RX_VECTOR), interrupt(IPL1SOFT))) _UART1_RX( 
    // uint32_t s=(uint32_t)U1STA;
      if(U1STAbits.FERR==1 )
      {
-       // pin1_hi;
+   //    pin1_hi;
         D512_IF.Fflag=OK;
         D512_IF.Ramka_OK=NOK;
         D512_IF.Timeout=NOK;
@@ -120,9 +120,9 @@ void __attribute__ ((vector(_UART1_RX_VECTOR), interrupt(IPL1SOFT))) _UART1_RX( 
              {
                  case DS_START:
                    
-               //   pin2_hi;
+                  pin2_hi;
                       D512_IF.Fflag=NOK;
-                      pin2_hi;
+                    
                       if(D512_IF.Timeout)
                       {
                           dmxstate=DS_BREAK;
@@ -137,15 +137,19 @@ void __attribute__ ((vector(_UART1_RX_VECTOR), interrupt(IPL1SOFT))) _UART1_RX( 
                  
                       break;
                  case   DS_DATA:
-                     channel_data[cd_addr++]=U1RXREG;
+                     channel_data[++cd_addr]=U1RXREG;
                             pin3_hi;
-                            if(cd_addr==DMX_CHANNELS)
+                            if(cd_addr== (DMX_CHANNELS-10))
                             {
                                 D512_IF.Ramka_OK=OK;
                               //  memcpy(datas,channel_data,DMX_CHANNELS);
-                                dmxstate=DS_BREAK;
+                               // dmxstate=DS_BREAK;
+                                 pin2_hi;
                             }
                      break;
+                default:
+                     break;
+                     
                       
              }
              
